@@ -10,9 +10,9 @@
 #include <fcitx/frontend.h>
 
 #ifdef DEBUG
-#define DBG_FPINTF(x, ...) fprintf(x, __VA_ARGS__)
+#define DBG_FPRINTF(x, ...) fprintf(x, __VA_ARGS__)
 #else
-#define DBG_FPINTF(x, ...)
+#define DBG_FPRINTF(x, ...)
 #endif
 
 #define FCITX_DBUS_SERVICE "org.fcitx.Fcitx"
@@ -129,7 +129,7 @@ int load(const char* dsopath)
         g_mess[i] = NULL;
     }
 
-    DBG_FPINTF(stderr, "%s, start\n", __func__);
+    DBG_FPRINTF(stderr, "%s, start\n", __func__);
 
     self = dlopen(dsopath, RTLD_LAZY);
     if (!self) {
@@ -195,7 +195,7 @@ int load(const char* dsopath)
     g_conn = conn;
     inited = 1;
 
-    DBG_FPINTF(stderr, "%s, end\n", __func__);
+    DBG_FPRINTF(stderr, "%s, end\n", __func__);
 
     return 0;
 error:
@@ -220,7 +220,7 @@ int unload(int unuse)
 
     (void)unuse;
 
-    DBG_FPINTF(stderr, "%s, start\n", __func__);
+    DBG_FPRINTF(stderr, "%s, start\n", __func__);
     if (self) {
         dlclose(self);
         self = NULL;
@@ -237,7 +237,7 @@ int unload(int unuse)
         g_conn = NULL;
     }
 
-    DBG_FPINTF(stderr, "%s, end\n", __func__);
+    DBG_FPRINTF(stderr, "%s, end\n", __func__);
     return 0;
 }
 
@@ -252,7 +252,7 @@ int is_im_enable(int unuse)
         goto end;
     }
 
-    DBG_FPINTF(stderr, "%s, start\n", __func__);
+    DBG_FPRINTF(stderr, "%s, start\n", __func__);
 
     reply = dbus_connection_send_with_reply_and_block(
                   g_conn, g_mess[FCITX_DBUS_GET_CURRENT_STATE], 1000, NULL);
@@ -263,13 +263,13 @@ int is_im_enable(int unuse)
     }
 
 end:
-    DBG_FPINTF(stderr, "%s, end, reply:%p, result:%d\n", __func__, reply, result);
+    DBG_FPRINTF(stderr, "%s, end, reply:%p, result:%d\n", __func__, reply, result);
     return im_on;
 }
 
 int im_set(char *active)
 {
-    DBG_FPINTF(stderr, "%s, start, active : %s\n", __func__, active);
+    DBG_FPRINTF(stderr, "%s, start, active : %s\n", __func__, active);
 
     if (active[0] == '1') {
         dbus_connection_send(g_conn, g_mess[FCITX_DBUS_ACTIVATE], NULL);
@@ -278,7 +278,7 @@ int im_set(char *active)
     }
     dbus_connection_flush(g_conn);
 
-    DBG_FPINTF(stderr, "%s, end\n", __func__);
+    DBG_FPRINTF(stderr, "%s, end\n", __func__);
     return 0;
 }
 
