@@ -165,7 +165,6 @@ int load(const char* dsopath)
     } else {
         goto error;
     }
-    free(srv_name);
 
     addr = get_dbus_address();
     if (!addr) {
@@ -173,7 +172,6 @@ int load(const char* dsopath)
     }
 
     conn = dbus_connection_open(addr, NULL);
-    fcitx_utils_free(addr);
     if (!conn) {
         goto error;
     }
@@ -192,6 +190,9 @@ int load(const char* dsopath)
         dbus_connection_set_exit_on_disconnect(conn, FALSE);
     }
 
+    free(srv_name);
+    free(addr);
+
     g_conn = conn;
     inited = 1;
 
@@ -201,6 +202,9 @@ int load(const char* dsopath)
 error:
     if (srv_name) {
         free(srv_name);
+    }
+    if (addr) {
+        free(addr);
     }
     for (i = 0; i < FCITX_DBUS_N; ++i) {
         if (g_mess[i]) {
