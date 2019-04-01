@@ -22,12 +22,14 @@ Vim script of this plugin is based on [vim-uim-ctrl-imaf.vim](https://github.com
   ```
 
 * Setting of fcitx
-  ```
+  ```sh
   echo 'FCITX_NO_PREEDIT_APPS=""' | sudo tee -a /etc/environment
   ```
 
-* vim-plug
+* Setting of vim and vim-plug
   ```viml
+  set imstyle=1
+  set iminsert=2
   Plug 'presuku/vim-fcitx-ctl'
   ```
 
